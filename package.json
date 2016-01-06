@@ -1,0 +1,19 @@
+{
+  "name": "get-video-thumb",
+  "version": "1.0.2",
+  "description": "extracting thumbs from facebook, youtube and vimeo with ease",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "thumb"
+  ],
+  "author": "avokadas",
+  "license": "ISC",
+  "dependencies": {
+    "request": "2.x",
+    "jsdom": "7.x",
+    "lodash": "3.x"
+  }
+}
