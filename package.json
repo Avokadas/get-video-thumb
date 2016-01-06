@@ -1,6 +1,6 @@
 {
   "name": "get-video-thumb",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "extracting thumbs from facebook, youtube and vimeo with ease",
   "main": "index.js",
   "scripts": {

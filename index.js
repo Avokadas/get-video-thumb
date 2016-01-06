@@ -4,7 +4,7 @@ var request = require('request');
 var jsdom = require('jsdom');
 var _ = require('lodash');
 
-module.export = function(videoUrl, callback) {
+module.exports = function(videoUrl, callback) {
 
     if (videoUrl.search("vimeo") > -1) {
         getVimeoThumb(videoUrl, function (err, thumb) {
