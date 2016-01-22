@@ -4,9 +4,9 @@ module.exports["unit"] = {
     rootPath: ".",
     environment: "node",
     sources: [
-        "src/*.js"
+        "src/**/*.js"
     ],
     tests: [
-        "test/*.test.js"
+        "test/**/*.test.js"
     ]
 };
