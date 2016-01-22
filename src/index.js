@@ -4,7 +4,7 @@ var request = require('request');
 var jsdom = require('jsdom');
 var _ = require('lodash');
 
-module.exports = function(videoUrl, callback) {
+module.exports = function (videoUrl, callback) {
 
     if  (!/^https:/i.test(videoUrl)) {
         callback(new Error('Url is not Https: ' + videoUrl), null);

@@ -9,6 +9,8 @@ buster.testCase("index", {
     setUp:function(){
         this.ok = 'https://www.youtube.com/watch?v=ANLWMDD6-Ac';
         this.nonHttp = 'http://www.youtube.com/watch?v=ANLWMDD6-Ac';
+
+        this.youtube = 'https://www.youtube.com/watch?t=9&v=EFu7hdEzf7w';
     },
 
     "should unset thumb if it's not HTTPS" : function(done) {
@@ -17,6 +19,15 @@ buster.testCase("index", {
             expect(err.message).toEqual('Url is not Https: http://www.youtube.com/watch?v=ANLWMDD6-Ac');
             done();
         }.bind(this));
+    },
+    youtube: {
+        "should create thumb url with extracted video ID": function(done) {
+            thumby(this.youtube, function (err, res) {
+                expect(res).toEqual('https://img.youtube.com/vi/EFu7hdEzf7w/hqdefault.jpg');
+                done();
+            });
+
+        }
     }
 
     /*vimeo: {
@@ -57,24 +68,7 @@ buster.testCase("index", {
         }
     },
 
-    youtube: {
 
-        "should create thumb url with extracted video ID": function() {
-            var videos = [
-                this.youtube,
-                _.merge({}, this.youtube, {permalink: "https://www.youtube.com/watch?t=9&v=EFu7hdEzf7w"}),
-                _.merge({}, this.youtube, {permalink: "https://www.youtube.com/watch?v=EFu7hdEzf7w&t=9&"})
-            ];
-
-            videoProcessor(videos, function() {
-                expect(_.pluck(videos, "videoThumb")).toEqual([
-                    "https://img.youtube.com/vi/EFu7hdEzf7w/hqdefault.jpg",
-                    "https://img.youtube.com/vi/EFu7hdEzf7w/hqdefault.jpg",
-                    "https://img.youtube.com/vi/EFu7hdEzf7w/hqdefault.jpg"
-                ]);
-            });
-        }
-    },
 
     facebook: {
 
