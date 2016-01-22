@@ -1,9 +1,9 @@
 {
   "name": "get-video-thumb",
-  "version": "1.0.4",
-  "repository" :
-  { "type" : "git"
-  , "url" : "https://github.com/Avokadas/get-video-thumb.git"
+  "version": "1.0.6",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Avokadas/get-video-thumb.git"
   },
   "description": "extracting thumbs from facebook, youtube and vimeo with ease",
   "main": "index.js",
@@ -19,5 +19,11 @@
     "request": "2.x",
     "jsdom": "7.x",
     "lodash": "3.x"
+  },
+  "devDependencies": {
+    "buster": "0.7.x",
+    "grunt": "0.4.x",
+    "grunt-buster": "0.4.x",
+    "grunt-contrib-jshint": "0.12.x"
   }
 }

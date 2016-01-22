@@ -6,6 +6,11 @@ var _ = require('lodash');
 
 module.exports = function(videoUrl, callback) {
 
+    if  (!/^https:/i.test(videoUrl)) {
+        callback(new Error('Url is not Https: ' + videoUrl), null);
+        return;
+    }
+
     if (videoUrl.search("vimeo") > -1) {
         getVimeoThumb(videoUrl, function (err, thumb) {
             callback(err, thumb);
@@ -35,7 +40,6 @@ function getVimeoThumb(vimeoUrl, callback) {
     request.get({url: "http://vimeo.com/api/v2/video/" + vimeoUrl.match(/^https:\/\/vimeo.com\/(.*)$/)[1] + ".json", json: true}, function (error, response, body) {
 
         var innerError = null;
-
 
         if (error) {
             innerError = _.merge(new Error("Request error"), {
