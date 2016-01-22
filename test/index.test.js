@@ -8,7 +8,7 @@ buster.testCase("index", {
 
     setUp:function(){
         this.ok = 'https://www.youtube.com/watch?v=ANLWMDD6-Ac';
-        this.nonHttp = 'http://www.youtube.com/watch?v=ANLWMDD6-Ac'
+        this.nonHttp = 'http://www.youtube.com/watch?v=ANLWMDD6-Ac';
     },
 
     "should unset thumb if it's not HTTPS" : function(done) {
