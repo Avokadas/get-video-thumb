@@ -7,13 +7,11 @@ module.exports = function(grunt) {
             default: {}
         },
         jshint: {
-            jshintrc: true,
-            files: {
-                src: ['src/**/*.js', 'test/**/*.js']
-            }
+            src: [ "src/**/*.js", "test/**/*.js" ],
+            options: { jshintrc: true }
         }
     });
     grunt.loadNpmTasks('grunt-buster');
     grunt.loadNpmTasks('grunt-contrib-jshint');
-    grunt.registerTask('default', ['buster']);
+    grunt.registerTask('default', ['jshint', 'buster']);
 };

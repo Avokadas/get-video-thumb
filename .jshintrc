@@ -1,0 +1,17 @@
+{
+  "esversion": 6,
+  "node": true,
+  "immed": true,
+  "nonbsp": true,
+  "noempty": true,
+  "unused": true,
+  "undef": true,
+  "multistr": true,
+  "globals": {
+    "Promise": true,
+    "expect": true,
+    "assert": true,
+    "refute": true,
+    "buster": true
+  }
+}
