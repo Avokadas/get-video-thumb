@@ -1,7 +1,6 @@
 "use strict";
 
 var thumby = require('../src/index.js');
-var _ = require('lodash');
 var buster = require('buster');
 var expect = buster.referee.expect;
 
@@ -12,6 +11,7 @@ buster.testCase("index", {
         this.nonHttp = 'http://www.youtube.com/watch?v=ANLWMDD6-Ac';
         this.youtube = 'https://www.youtube.com/watch?t=9&v=EFu7hdEzf7w';
         this.vimeo = 'https://vimeo.com/152362608';
+        this.facebook = 'https://www.facebook.com/BuddyRest/videos/vb.182850171790666/825185544223789/?type=2&theater';
     },
 
     "should unset thumb if it's not HTTPS" : function(done) {
@@ -75,31 +75,28 @@ buster.testCase("index", {
     facebook: {
 
         "should return a thumb url from link": function(done) {
-            var videos = [this.facebook];
-
             require('nock')("https://www.facebook.com")
                 .get("/BuddyRest/videos/vb.182850171790666/825185544223789/?type=2&theater")
                 .reply(200, require('fs').readFileSync('test/fixtures/facebookRequestResponse.txt','utf8'));
 
-            thumby(videos, function() {
-                expect(_.pluck(videos, "videoThumb")[0]).toEqual("thisIsAnUrlFromARequestFixture");
+            thumby(this.facebook, function(err, res) {
+                expect(res).toEqual("thisIsAnUrlFromARequestFixture");
                 done();
             });
-        }/*,
+        },
 
         "should pass down an error from jsdom if such exists": function (done) {
             var self = this;
-            var videos = [self.facebook];
             var stubbedError = new Error("Stubbed error!");
 
-            self.fakeDomify=self.stub(require("jsdom"),"env");
+            self.fakeDomify=self.stub(require("jsdom"), "env");
             self.fakeDomify.yields(stubbedError);
 
-            thumby(videos, function(err) {
+            thumby(self.facebook, function(err) {
                 expect(err).toMatch({
                     code: "E_REQUEST_ERROR",
                     error: stubbedError,
-                    url: self.facebook.permalink
+                    url: self.facebook
                 });
                 done();
             });
@@ -108,7 +105,7 @@ buster.testCase("index", {
         "should return an error if no thumb is found in the html": function(done) {
             var self = this;
 
-            self.fakeDomify=self.stub(require("jsdom"),"env");
+            self.fakeDomify=self.stub(require('jsdom'), 'env');
             self.fakeDomify.yields(null, {
                 document: {
                     getElementById(){
@@ -117,13 +114,11 @@ buster.testCase("index", {
                 }
             });
 
-            var videos = [self.facebook];
-
-            thumby(videos, function (err) {
-                expect(err).toMatch({code: "E_THUMB_NOT_FOUND", url: self.facebook.permalink});
+            thumby(this.facebook, function (err) {
+                expect(err).toMatch({code: "E_THUMB_NOT_FOUND", url: self.facebook});
                 done();
             });
-        }*/
+        }
     }
 
 });
