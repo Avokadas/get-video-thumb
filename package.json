@@ -24,6 +24,7 @@
     "buster": "0.7.x",
     "grunt": "0.4.x",
     "grunt-buster": "0.4.x",
-    "grunt-contrib-jshint": "0.12.x"
+    "grunt-contrib-jshint": "0.12.x",
+    "nock": "5.x"
   }
 }

@@ -1,6 +1,7 @@
 "use strict";
 
 var thumby = require('../src/index.js');
+var _ = require('lodash');
 var buster = require('buster');
 var expect = buster.referee.expect;
 
@@ -9,8 +10,8 @@ buster.testCase("index", {
     setUp:function(){
         this.ok = 'https://www.youtube.com/watch?v=ANLWMDD6-Ac';
         this.nonHttp = 'http://www.youtube.com/watch?v=ANLWMDD6-Ac';
-
         this.youtube = 'https://www.youtube.com/watch?t=9&v=EFu7hdEzf7w';
+        this.vimeo = 'https://vimeo.com/152362608';
     },
 
     "should unset thumb if it's not HTTPS" : function(done) {
@@ -20,6 +21,7 @@ buster.testCase("index", {
             done();
         }.bind(this));
     },
+
     youtube: {
         "should create thumb url with extracted video ID": function(done) {
             thumby(this.youtube, function (err, res) {
@@ -28,31 +30,33 @@ buster.testCase("index", {
             });
 
         }
-    }
+    },
 
-    /*vimeo: {
+    vimeo: {
 
         setUp: function() {
             this.fakeRequest = this.stub(require("request"), "get");
-            this.fakeRequest.yields(null, {status: 200}, {thumbnail_url: 'https://i.vimeocdn.com/video/502815338_1280.jpg'});
+            this.fakeRequest.yields(null, {status: 200}, [{thumbnail_large: 'http://i.vimeocdn.com/video/552367528_640.jpg'}]);
         },
 
-        "should call vimeo for vimeo URL": function() {
-            videoProcessor([this.vimeo], function () {
+        "should call vimeo for vimeo URL": function(done) {
+            thumby(this.vimeo, function () {
                 expect(this.fakeRequest).toHaveBeenCalledOnce();
-                expect(this.fakeRequest.getCall(0).args[0].url).toEqual("https://vimeo.com/api/oembed.json?url=https://vimeo.com/116454763");
+                expect(this.fakeRequest.getCall(0).args[0].url).toEqual("http://vimeo.com/api/v2/video/152362608.json");
+                done();
             }.bind(this));
         },
 
-        "should return url from vimeo response": function() {
-            videoProcessor([this.vimeo], function () {
-                expect(this.vimeo.videoThumb).toEqual('https://i.vimeocdn.com/video/502815338_1280.jpg');
+        "should return url from vimeo response": function(done) {
+            thumby(this.vimeo, function (err, res) {
+                expect(res).toEqual('http://i.vimeocdn.com/video/552367528_640.jpg');
+                done();
             }.bind(this));
         },
 
         "should return error on request error": function() {
             this.fakeRequest.yields(new Error("some error"), {status: 500}, "error");
-            videoProcessor([this.vimeo], function (err) {
+            thumby(this.vimeo, function (err) {
                 expect(err.code).toEqual("E_REQUEST_ERROR");
                 expect(err.error.message).toEqual("some error");
             });
@@ -60,7 +64,7 @@ buster.testCase("index", {
 
         "should return error wrong status": function() {
             this.fakeRequest.yields(null, {status: 500}, {state: "down"});
-            videoProcessor([this.vimeo], function (err) {
+            thumby(this.vimeo, function (err) {
                 expect(err.code).toEqual("E_REQUEST_ERROR");
                 expect(err.status).toEqual(500);
                 expect(err.response).toEqual({state: "down"});
@@ -68,22 +72,20 @@ buster.testCase("index", {
         }
     },
 
-
-
     facebook: {
 
         "should return a thumb url from link": function(done) {
             var videos = [this.facebook];
 
-            nock("https://www.facebook.com")
+            require('nock')("https://www.facebook.com")
                 .get("/BuddyRest/videos/vb.182850171790666/825185544223789/?type=2&theater")
                 .reply(200, require('fs').readFileSync('test/fixtures/facebookRequestResponse.txt','utf8'));
 
-            videoProcessor(videos, function() {
+            thumby(videos, function() {
                 expect(_.pluck(videos, "videoThumb")[0]).toEqual("thisIsAnUrlFromARequestFixture");
                 done();
             });
-        },
+        }/*,
 
         "should pass down an error from jsdom if such exists": function (done) {
             var self = this;
@@ -93,7 +95,7 @@ buster.testCase("index", {
             self.fakeDomify=self.stub(require("jsdom"),"env");
             self.fakeDomify.yields(stubbedError);
 
-            videoProcessor(videos, function(err) {
+            thumby(videos, function(err) {
                 expect(err).toMatch({
                     code: "E_REQUEST_ERROR",
                     error: stubbedError,
@@ -117,11 +119,11 @@ buster.testCase("index", {
 
             var videos = [self.facebook];
 
-            videoProcessor(videos, function (err) {
+            thumby(videos, function (err) {
                 expect(err).toMatch({code: "E_THUMB_NOT_FOUND", url: self.facebook.permalink});
                 done();
             });
-        }
-    }*/
+        }*/
+    }
 
 });

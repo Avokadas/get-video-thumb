@@ -3,8 +3,8 @@
 var request = require('request');
 var jsdom = require('jsdom');
 var _ = require('lodash');
-
-module.exports = function (videoUrl, callback) {
+module.exports = qq;
+function qq (videoUrl, callback) {
 
     if  (!/^https:/i.test(videoUrl)) {
         callback(new Error('Url is not Https: ' + videoUrl), null);
@@ -34,7 +34,7 @@ module.exports = function (videoUrl, callback) {
     }
 
     callback("Video is neither vimeo, facebook or youtube... ("+ videoUrl +")", videoUrl);
-};
+}
 
 function getVimeoThumb(vimeoUrl, callback) {
     request.get({url: "http://vimeo.com/api/v2/video/" + vimeoUrl.match(/^https:\/\/vimeo.com\/(.*)$/)[1] + ".json", json: true}, function (error, response, body) {
@@ -94,5 +94,11 @@ function getFacebookThumb(facebookUrl, callback) {
             return;
         }
         callback(null, backgroundImage);
+    });
+}
+
+if(require.main === module) {
+    qq('https://vimeo.com/152362608', function(err, res){
+        console.log(res);
     });
 }
